@@ -4,8 +4,8 @@ from email.mime.text import MIMEText
 
 app = Flask(__name__)
 
-EMAIL = "YOUREMAIL@gmail.com"
-PASSWORD = "YOUR PASSWORD"
+EMAIL = "EMAIL"
+PASSWORD = "PASSWORD"
 
 # ✅ SEND EMAIL
 def send_email(to_email, subject, message):
