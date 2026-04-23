@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AIML Voice Email</title>
+</head>
+<body>
+
+<h2>Voice Email System</h2>
+
+<button onclick="startVoice()">Start Voice</button>
+
+<p id="status"></p>
+
+<script>
+function startVoice() {
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+
+    recognition.lang = "en-US";
+    recognition.start();
+
+    document.getElementById("status").innerText = "🎧 Listening...";
+
+    recognition.onresult = async function(event) {
+        const text = event.results[0][0].transcript;
+
+        let formData = new FormData();
+        formData.append("text", text);
+
+        const response = await fetch('/send', {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await response.json();
+
+        if (data.status === "success") {
+            document.getElementById("status").innerText =
+                "✅ Email Sent\n\nTo: " + data.to +
+                "\nSubject: " + data.subject +
+                "\nMessage: " + data.message;
+        } else {
+            document.getElementById("status").innerText =
+                "❌ " + data.msg;
+        }
+    };
+}
+</script>
+
+</body>
+</html>
